@@ -425,7 +425,7 @@ class CourseManager:
         pass
         list = []
         if len(self.courses) != 0:
-            for i in self.courses:
+            for i in range(len(self.courses)):
                 list.append(f"{self.courses[i].course_code}: {self.courses[i].course_name} ({self.courses[i].instructor_name})")
         else:
             list.append("No courses available.")
