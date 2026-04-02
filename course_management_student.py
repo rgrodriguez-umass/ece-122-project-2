@@ -415,6 +415,7 @@ class CourseManager:
         Format for each entry:
             "<course_code>: <course_name> (<instructor_name>)"
 
+
         Returns:
             list[str]: One string per course,
                        or ["No courses available."] if no courses have been added.
