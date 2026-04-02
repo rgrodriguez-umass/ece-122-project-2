@@ -35,7 +35,6 @@ class CourseItem:
         """
         # TODO: Implement this method
         self.completed = True
-        return
 
     def update_score(self, score):
         """
@@ -48,7 +47,6 @@ class CourseItem:
             - Must not print anything.
         """
         # TODO: Implement this method
-        pass
         self.points_earned = score
 
     def display_info(self):
@@ -67,15 +65,16 @@ class CourseItem:
             str: The formatted item info string.
         """
         # TODO: Build and return the formatted string described above
-        pass
         if self.points_earned is None:
             score_text = "Not graded"
         else:
             score_text = self.points_earned / self.points_possible
+
         if self.completed:
             status = "Completed"
         else:
             status = "Incomplete"
+
         return f"{self.category}: {self.title} | Due: {self.due_date} | Score: {score_text} | Status: {status}"
 
 
@@ -177,12 +176,15 @@ class Course:
             - Must not print anything.
         """
         # TODO: Check that the values sum to ~100, then update self.weights
-        for i in range(len(new_weights)):
-            if new_weights[i] + weights[i] == 100:
-                weights[i] = new_weights[i]
-                return True
-            else:
-                return False
+        sum_check = 0
+        for i in new_weights:
+            sum_check += new_weights[i]
+        if 99.99 <= sum_check <= 100.01:
+            self.weights = new_weights
+            return True
+        else:
+            return False
+
 
     def display_weights(self):
         """
@@ -195,11 +197,10 @@ class Course:
             list[str]: One string per category in self.weights.
         """
         # TODO: Build and return the list of weight strings
-        weights = []
-        for category in self.weights:
-            weights.append(score_to_letter(category))
-
-        return weights
+        display_list = []
+        for category, weight in self.weights.items():
+            display_list.append(f"  {category}: {weight}%")
+        return display_list
 
     # ── Item management ───────────────────────────────────────────────────
 
@@ -234,7 +235,7 @@ class Course:
         # TODO: Loop through self.items, find the match, remove it, return True
         # If not found, return False
         for i in range(len(self.items)):
-            if self.items[i].title == item_title:
+            if self.items[i].title.lower() == item_title.lower():
                 self.items.pop(i)
                 return True
         return False
@@ -254,11 +255,10 @@ class Course:
             - Must not print anything.
         """
         # TODO: Loop through self.items and return the matching item or None
-        pass
         courseItem = None
-        for i in self.items:
-            if i.lower() == item_title.lower():
-                courseItem = i
+        for i in range(len(self.items)):
+            if self.items[i].title.lower() == item_title.lower():
+                courseItem = self.items[i].title
         return courseItem
 
     def display_items(self):
@@ -270,15 +270,15 @@ class Course:
                        or ["No items found."] if the course has no items.
         """
         # TODO: Implement this method
-        pass
-        list = []
-        if self.items.len != 0:
-            for i in self.items:
-                if self.items.len != 0:
-                    list.append(i.display_info())
+        item_list = []
+        if len(self.items) != 0:
+            for i in range(len(self.items)):
+                if len(self.items) != 0:
+                    item_list.append(self.items[i].display_info())
         else:
-            list.append("No items found.")
-        return list
+            item_list.append("No items found.")
+        return item_list
+
     def display_pending_items(self):
         """
         Return a list of formatted strings for all incomplete items.
@@ -289,14 +289,14 @@ class Course:
         """
         # TODO: Filter items where completed == False and return their display_info() strings
         pass
-        list = []
-        if self.items.len != 0:
-            for i in self.items:
-                if self.completed == False:
-                    list.append(i.display_info())
+        pending_list = []
+        if len(self.items) != 0:
+            for i in range(len(self.items)):
+                if not self.items[i].completed:
+                    pending_list.append(self.items[i].display_info())
         else:
-            list.append("No pending items.")
-        return list
+            pending_list.append("No pending items.")
+        return pending_list
     # ── Grade calculation ─────────────────────────────────────────────────
 
     def calculate_grade(self):
@@ -328,16 +328,20 @@ class Course:
         # TODO: Implement the weighted grade algorithm described above
         weighted_sum = 0
         active_weight = 0
-        for category in self.weights:
-            if category.weight != None:
-                category_pct = sum(category.points_earned) / sum(category.points_possible) * 100
-                weighted_sum += category_pct * category.weight
-                active_weight += category.weight
-        if weighted_sum == 0 and active_weight == 0:
-            return (None, None)
-        else:
-            final_percentage = round(weighted_sum / active_weight, 2)
-            return (final_percentage, score_to_letter(final_percentage))
+        for category, weight in self.weights.items():
+            category_pct = 0
+            sum_of_points_earned = 0
+            sum_of_points_possible = 0
+            for i in range(len(self.items)):
+                if self.items[i].category == category:
+                    sum_of_points_earned += self.items[i].points_earned
+                    sum_of_points_possible += self.items[i].points_possible
+            if sum_of_points_earned > 0 and sum_of_points_possible > 0:
+                category_pct = sum_of_points_earned / sum_of_points_possible * 100
+                weighted_sum += category_pct * weight
+                active_weight += weight
+        final_percentage = round((weighted_sum / active_weight), 2)
+        return final_percentage, score_to_letter(final_percentage)
 
 class CourseManager:
     def __init__(self):
