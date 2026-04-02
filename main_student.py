@@ -65,9 +65,10 @@ def main():
 
         elif choice == "2":
             # TODO: Print each string returned by manager.display_courses()
+
             courses = manager.display_courses()
-            for course in courses:
-                print(course)
+            for i in courses:
+                print(i)
 
         elif choice == "3":
             # TODO: Call prompt_course_code(manager) to get the course

@@ -1,6 +1,3 @@
-from parse import percentage
-
-
 class CourseItem:
     def __init__(self, title, category, due_date, points_possible):
         """
@@ -423,9 +420,9 @@ class CourseManager:
         # TODO: Implement this method
         pass
         list = []
-        if self.courses.len != 0:
+        if len(self.courses) != 0:
             for i in self.courses:
-                list.append(f"{self.course_code}: {self.course_name} ({self.instructor_name})")
+                list.append(f"{self.courses[i].course_code}: {self.courses[i].course_name} ({self.courses[i].instructor_name})")
         else:
             list.append("No courses available.")
         return list
