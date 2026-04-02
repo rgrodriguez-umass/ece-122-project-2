@@ -52,6 +52,7 @@ class CourseItem:
         """
         # TODO: Implement this method
         pass
+        self.points_earned = score
 
     def display_info(self):
         """
@@ -70,6 +71,15 @@ class CourseItem:
         """
         # TODO: Build and return the formatted string described above
         pass
+        if self.points_earned is None:
+            score_text = "Not graded"
+        else:
+            score_text = self.points_earned / self.points_possible
+        if self.completed:
+            status = "Completed"
+        else:
+            status = "Incomplete"
+        return f"{self.category}: {self.title} | Due: {self.due_date} | Score: {score_text} | Status: {status}"
 
 
 # Default category weights — must sum to 100.
@@ -146,6 +156,11 @@ class Course:
         """
         # TODO: Set all instance variables described above
         pass
+        self.course_name = course_name
+        self.course_code = course_code
+        self.instructor_name = instructor_name
+        self.items = []
+        self.weights = dict(DEFAULT_WEIGHTS)
 
     # ── Weight management ─────────────────────────────────────────────────
 
@@ -243,6 +258,11 @@ class Course:
         """
         # TODO: Loop through self.items and return the matching item or None
         pass
+        courseItem = None
+        for i in self.items:
+            if i.lower() == item_title.lower():
+                courseItem = i
+        return courseItem
 
     def display_items(self):
         """
@@ -254,7 +274,14 @@ class Course:
         """
         # TODO: Implement this method
         pass
-
+        list = []
+        if self.items.len != 0:
+            for i in self.items:
+                if self.items.len != 0:
+                    list.append(i.display_info())
+        else:
+            list.append("No items found.")
+        return list
     def display_pending_items(self):
         """
         Return a list of formatted strings for all incomplete items.
@@ -265,7 +292,14 @@ class Course:
         """
         # TODO: Filter items where completed == False and return their display_info() strings
         pass
-
+        list = []
+        if self.items.len != 0:
+            for i in self.items:
+                if self.completed == False:
+                    list.append(i.display_info())
+        else:
+            list.append("No pending items.")
+        return list
     # ── Grade calculation ─────────────────────────────────────────────────
 
     def calculate_grade(self):
@@ -349,6 +383,10 @@ class CourseManager:
         """
         # TODO: Loop through self.courses and return the matching course or None
         pass
+        for i in self.courses:
+            if lower(i.name) == lower(course_name):
+                return i
+        return None
 
     def find_course_by_code(self, course_code):
         """
@@ -366,7 +404,10 @@ class CourseManager:
         """
         # TODO: Loop through self.courses and match on course_code (case-insensitive)
         pass
-
+        for i in self.courses:
+            if i.course_code.lower() == course_code.lower():
+                return i
+        return None
     def display_courses(self):
         """
         Return a list of formatted strings for all courses.
@@ -374,9 +415,17 @@ class CourseManager:
         Format for each entry:
             "<course_code>: <course_name> (<instructor_name>)"
 
+
         Returns:
             list[str]: One string per course,
                        or ["No courses available."] if no courses have been added.
         """
         # TODO: Implement this method
         pass
+        list = []
+        if self.courses.len != 0:
+            for i in self.courses:
+                list.append(f"{self.course_code}: {self.course_name} ({self.instructor_name})")
+        else:
+            list.append("No courses available.")
+        return list
