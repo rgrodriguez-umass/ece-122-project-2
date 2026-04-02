@@ -1,4 +1,4 @@
-from course_management import CourseItem, Course, CourseManager, DEFAULT_WEIGHTS
+from course_management_student import CourseItem, Course, CourseManager, DEFAULT_WEIGHTS
 
 
 def display_menu():
@@ -38,7 +38,7 @@ def prompt_course_code(manager):
     for course in manager.display_courses():
         print(course, end=" ")
     code = input("\nEnter course code:")
-    if manager.find_course_by_code(code) != None:
+    if manager.find_course_by_code(code) is not None:
         return manager.find_course_by_code(code)
     else:
         print("Course not found.")
@@ -59,7 +59,8 @@ def main():
             course_name = input("Enter course name: ")
             course_code = input("Enter course code: ")
             instructor = input("Enter instructor: ")
-            manager.add_course(course_name, course_code, instructor)
+            tempCourse = Course(course_name, course_code, instructor)
+            manager.add_course(tempCourse)
             print("Course added successfully.")
 
         elif choice == "2":
@@ -74,13 +75,13 @@ def main():
             # Otherwise, prompt for item title, category, due date, and points possible
             # Create a CourseItem and add it to the course via course.add_item()
             # Print "Item added successfully."
-            if prompt_course_code(manager) == None:
+            if prompt_course_code(manager) is None:
                 continue
             else:
                 item_title = input("Enter course item title: ")
                 course_category = input("Enter course category: ")
                 due_date = input("Enter due date: ")
-                possible_points = input("Enter possible points: ")
+                possible_points = float(input("Enter possible points: "))
                 CourseItem(item_title, course_category, due_date, possible_points)
                 print("Item added successfully.")
 
@@ -89,10 +90,11 @@ def main():
             # TODO: Call prompt_course_code(manager) to get the course
             # If None, use 'continue'
             # Otherwise, print each string returned by course.display_items()
-            if prompt_course_code(manager) == None:
+            x = prompt_course_code(manager)
+            if x is None:
                 continue
             else:
-                for item in course.display_items():
+                for item in x.display_items():
                     print(item)
 
         elif choice == "5":
@@ -101,11 +103,12 @@ def main():
             # Prompt for item title, call course.find_item()
             # If None, print "Item not found."
             # Otherwise, call item.mark_complete() and print "Item marked as completed."
-            if prompt_course_code(manager) == None:
+            x = prompt_course_code(manager)
+            if x is None:
                 continue
             else:
                 item_title = input("Enter course item title: ")
-                if course.find_item(item_title) == None:
+                if x.find_item(item_title) is None:
                     print("Item not found.")
                 else:
                     item.mark_complete()
@@ -123,7 +126,7 @@ def main():
             if x is None:
                 continue
             else:
-                if course.find_item(input("Please type an item title: ")) is None:
+                if x.find_item(input("Please type an item title: ")) is None:
                     print("Item not found")
                 else:
                     item.update_score(input("Please input a score: "))
@@ -138,7 +141,7 @@ def main():
             if x is None:
                 continue
             else:
-                print(course.display_pending_items())
+                print(x.display_pending_items())
         elif choice == "8":
             # TODO: Call prompt_course_code(manager) to get the course
             # If None, use 'continue'
@@ -151,18 +154,20 @@ def main():
             #   Print a per-category breakdown (see project spec for format)
             pass
             x = prompt_course_code(manager)
-            if x == None:
+            if x is None:
                 continue
             else:
-                if course.calculate_grade() == None:
+                if x.calculate_grade() is None:
                     print("No graded items yet.")
                 else:
-                    print(f"Course Grade for {courseHelper.find_course_by_code(x)}: {course.calculate_grade():.2f}")
-                    print(f"Letter grade     : {find_course_by_code(x).score_to_letter(course.calculate_grade())}")
+                    print(f"Course Grade for {x}: {x.calculate_grade():.2f}")
+                    print(f"Letter grade     : {x.score_to_letter(x.calculate_grade())}")
                     print()
-                    for i in len(course.category):
-                        if course.category[i] != None:
-                            print(f"{course.category[i]} ({course.display_weights()[i]}): {}")
+                    for i in len(x.category):
+                        if x.category[i] is not None:
+                            print(f"{x.category[i]} ({x.display_weights()[i]}): No graded items.")
+                        else:
+                            print(f"{x} {x.display_weights()[i]}")
 
 
         elif choice == "9":
@@ -179,19 +184,19 @@ def main():
             x = prompt_course_code(manager)
             sum = 0
             d = dict()
-            if x == None:
+            if x is None:
                 print(f"Current weights for {x}")
-                print(course.display_weights())
+                print(x.display_weights())
                 print()
                 print("Please enter new weights for each category.")
-                for i in course.category:
+                for i in x.category:
                     shorten = (input(f"{i}: "))
                     sum += shorten
                     d.add(shorten)
                 if sum != 100:
                     print(f"Weights must sum to 100 (got {sum:.2f}). No changes made.")
                 else:
-                    course.set_weights(d)
+                    x.set_weights(d)
 
 
         elif choice == "10":

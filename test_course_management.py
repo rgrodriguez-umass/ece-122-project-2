@@ -1,5 +1,5 @@
 import unittest
-from course_management import CourseItem, Course, CourseManager, DEFAULT_WEIGHTS, score_to_letter
+from course_management_student import CourseItem, Course, CourseManager, DEFAULT_WEIGHTS, score_to_letter
 
 
 # =============================================================================
