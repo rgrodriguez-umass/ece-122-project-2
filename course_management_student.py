@@ -166,8 +166,8 @@ class Course:
         """
         # TODO: Check that the values sum to ~100, then update self.weights
         for i in range(len(new_weights)):
-            if new_weights[i] + category.weights == 100:
-                category.weights[i] = new_weights[i]
+            if new_weights[i] + weights[i] == 100:
+                weights[i] = new_weights[i]
                 return True
             else:
                 return False

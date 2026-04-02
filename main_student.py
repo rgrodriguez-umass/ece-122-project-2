@@ -1,4 +1,4 @@
-from course_management import CourseItem, Course, CourseManager, DEFAULT_WEIGHTS
+from course_management_student import CourseItem, Course, CourseManager, DEFAULT_WEIGHTS
 
 
 def display_menu():
