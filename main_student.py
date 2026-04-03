@@ -36,8 +36,8 @@ def prompt_course_code(manager):
     # TODO: Implement this helper following the steps above
     print("\nCurrent courses: ")
     for course in manager.display_courses():
-        print(course, end=" ")
-    code = input("\nEnter course code: ")
+        print(f"  {course} ")
+    code = input("Enter course code: ")
     if manager.find_course_by_code(code) is not None:
         return manager.find_course_by_code(code)
     else:
@@ -80,10 +80,10 @@ def main():
             if x is None:
                 continue
             else:
-                item_title = input("Enter course item title: ")
-                course_category = input("Enter course category: ")
+                item_title = input("Enter item title: ")
+                course_category = input("Enter category (Homework/Quiz/Exam/Lecture Note/Project): ")
                 due_date = input("Enter due date: ")
-                possible_points = float(input("Enter possible points: "))
+                possible_points = float(input("Enter points possible: "))
                 x.add_item(CourseItem(item_title, course_category, due_date, possible_points))
                 print("Item added successfully.")
 
@@ -109,7 +109,7 @@ def main():
             if x is None:
                 continue
             else:
-                item_title = input("Enter course item title: ")
+                item_title = input("Enter item title: ")
                 if x.find_item(item_title) is None:
                     print("Item not found.")
                 else:
@@ -125,15 +125,15 @@ def main():
             # Print "Score updated successfully."
             pass
             x = prompt_course_code(manager)
-            item_title = input("Enter course item title: ")
+            item_title = input("Enter item title: ")
             if x is None:
                 continue
             else:
                 if x.find_item(item_title) is None:
-                    print("Item not found")
+                    print("Item not found.")
                 else:
                     x.find_item(item_title).update_score(float(input("Please input a score: ")))
-                    print("Score updated successfully")
+                    print("Score updated successfully.")
 
         elif choice == "7":
             # TODO: Call prompt_course_code(manager) to get the course
@@ -142,6 +142,7 @@ def main():
             pass
             x = prompt_course_code(manager)
             if x is None:
+                print("No pending items.")
                 continue
             else:
                 print(x.display_pending_items())
