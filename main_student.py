@@ -129,7 +129,7 @@ def main():
             if x is None:
                 continue
             else:
-                if x.find_item(input("Please type an item title: ")) is None:
+                if x.find_item(item_title) is None:
                     print("Item not found")
                 else:
                     x.find_item(item_title).update_score(input("Please input a score: "))

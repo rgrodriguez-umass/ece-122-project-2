@@ -258,7 +258,7 @@ class Course:
         courseItem = None
         for i in range(len(self.items)):
             if self.items[i].title.lower() == item_title.lower():
-                courseItem = self.items[i].title
+                courseItem = self.items[i]
         return courseItem
 
     def display_items(self):
