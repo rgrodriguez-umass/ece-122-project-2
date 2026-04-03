@@ -216,7 +216,6 @@ class Course:
         """
         # TODO: Append item to self.items
         self.items.append(item)
-        return
 
     def remove_item(self, item_title):
         """
@@ -384,7 +383,7 @@ class CourseManager:
         # TODO: Loop through self.courses and return the matching course or None
         pass
         for i in self.courses:
-            if lower(i.name) == lower(course_name):
+            if i.name.lower() == course_name.lower():
                 return i
         return None
 
@@ -408,6 +407,7 @@ class CourseManager:
             if i.course_code.lower() == course_code.lower():
                 return i
         return None
+
     def display_courses(self):
         """
         Return a list of formatted strings for all courses.
