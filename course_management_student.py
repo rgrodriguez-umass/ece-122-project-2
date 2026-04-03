@@ -273,8 +273,7 @@ class Course:
         item_list = []
         if len(self.items) != 0:
             for i in range(len(self.items)):
-                if len(self.items) != 0:
-                    item_list.append(self.items[i].display_info())
+                item_list.append(self.items[i].display_info())
         else:
             item_list.append("No items found.")
         return item_list

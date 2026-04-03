@@ -76,14 +76,15 @@ def main():
             # Otherwise, prompt for item title, category, due date, and points possible
             # Create a CourseItem and add it to the course via course.add_item()
             # Print "Item added successfully."
-            if prompt_course_code(manager) is None:
+            x = prompt_course_code(manager)
+            if x is None:
                 continue
             else:
                 item_title = input("Enter course item title: ")
                 course_category = input("Enter course category: ")
                 due_date = input("Enter due date: ")
                 possible_points = float(input("Enter possible points: "))
-                CourseItem(item_title, course_category, due_date, possible_points)
+                x.add_item(CourseItem(item_title, course_category, due_date, possible_points))
                 print("Item added successfully.")
 
 
@@ -112,7 +113,7 @@ def main():
                 if x.find_item(item_title) is None:
                     print("Item not found.")
                 else:
-                    item.mark_complete()
+                    x.find_item(item_title).mark_complete()
                     print("Item marked as completed.")
 
         elif choice == "6":
@@ -124,13 +125,14 @@ def main():
             # Print "Score updated successfully."
             pass
             x = prompt_course_code(manager)
+            item_title = input("Enter course item title: ")
             if x is None:
                 continue
             else:
                 if x.find_item(input("Please type an item title: ")) is None:
                     print("Item not found")
                 else:
-                    item.update_score(input("Please input a score: "))
+                    x.find_item(item_title).update_score(input("Please input a score: "))
                     print("Score updated successfully")
 
         elif choice == "7":
