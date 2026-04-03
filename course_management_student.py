@@ -176,9 +176,9 @@ class Course:
             - Must not print anything.
         """
         # TODO: Check that the values sum to ~100, then update self.weights
-        sum_check = 0
-        for i in new_weights:
-            sum_check += new_weights[i]
+        sum_check = 0.0
+        for weight in new_weights.values():
+            sum_check += weight
         if 99.99 <= sum_check <= 100.01:
             self.weights = new_weights
             return True
@@ -326,20 +326,29 @@ class Course:
         # TODO: Implement the weighted grade algorithm described above
         weighted_sum = 0
         active_weight = 0
+
         for category, weight in self.weights.items():
             category_pct = 0
             sum_of_points_earned = 0
             sum_of_points_possible = 0
+            contains_category = False
+
             for i in range(len(self.items)):
-                if self.items[i].category == category:
+                if self.items[i].category.lower() == category.lower():
                     sum_of_points_earned += self.items[i].points_earned
                     sum_of_points_possible += self.items[i].points_possible
-            if sum_of_points_earned > 0 and sum_of_points_possible > 0:
+                    contains_category = True
+
+            if contains_category:
                 category_pct = sum_of_points_earned / sum_of_points_possible * 100
                 weighted_sum += category_pct * weight
                 active_weight += weight
-        final_percentage = round((weighted_sum / active_weight), 2)
-        return final_percentage, score_to_letter(final_percentage)
+
+        if weighted_sum != 0 and active_weight != 0:
+            final_percentage = float(weighted_sum) / float(active_weight)
+            return f"{final_percentage:.2f}", score_to_letter(final_percentage)
+        else:
+            return None
 
 class CourseManager:
     def __init__(self):

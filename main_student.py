@@ -34,10 +34,10 @@ def prompt_course_code(manager):
         Course or None.
     """
     # TODO: Implement this helper following the steps above
-    print("\nCurrent courses:")
+    print("\nCurrent courses: ")
     for course in manager.display_courses():
         print(course, end=" ")
-    code = input("\nEnter course code:")
+    code = input("\nEnter course code: ")
     if manager.find_course_by_code(code) is not None:
         return manager.find_course_by_code(code)
     else:
@@ -145,6 +145,7 @@ def main():
                 continue
             else:
                 print(x.display_pending_items())
+
         elif choice == "8":
             # TODO: Call prompt_course_code(manager) to get the course
             # If None, use 'continue'
@@ -160,17 +161,29 @@ def main():
             if x is None:
                 continue
             else:
-                if x.calculate_grade() is None:
+                grade_data = x.calculate_grade()
+                if grade_data is None:
                     print("No graded items yet.")
                 else:
-                    print(f"Course Grade for {x}: {x.calculate_grade():.2f}")
-                    print(f"Letter grade     : {x.score_to_letter(x.calculate_grade())}")
+                    print(f"Course Grade for {x.course_code}: {x.course_name}")
+                    print(f"  Weighted average : {grade_data[0]}%")
+                    print(f"  Letter grade     : {grade_data[1]}")
                     print()
-                    for i in len(x.category):
-                        if x.category[i] is not None:
-                            print(f"{x.category[i]} ({x.display_weights()[i]}): No graded items.")
+                    print(f"  Category breakdown:")
+                    for category, weight in x.weights.items():
+                        total_points = 0
+                        total_possible = 0
+                        has_category = False
+                        for i in range(len(x.items)):
+                            if category.lower() == x.items[i].category.lower():
+                                total_points += x.items[i].points_earned
+                                total_possible += x.items[i].points_possible
+                                has_category = True
+                        if has_category:
+                            print(f"    {category} ({weight}): {total_points}/{total_possible} = {total_points / total_possible * 100:.2f}%")
                         else:
-                            print(f"{x} {x.display_weights()[i]}")
+                            print(f"    {category} ({weight}): No graded items")
+
 
 
         elif choice == "9":
@@ -188,18 +201,28 @@ def main():
             sum = 0
             d = dict()
             if x is None:
-                print(f"Current weights for {x}")
-                print(x.display_weights())
+                continue
+            else:
+                print(f"Current weights for {x.course_code}")
+                holder = x.display_weights()
+                for i in range(len(holder)):
+                    print(f"  {holder[i]}")
                 print()
-                print("Please enter new weights for each category.")
-                for i in x.category:
-                    shorten = (input(f"{i}: "))
-                    sum += shorten
-                    d.add(shorten)
-                if sum != 100:
-                    print(f"Weights must sum to 100 (got {sum:.2f}). No changes made.")
+                print("Enter new weights for each category (must sum to 100).")
+                print("Press Enter to keep the current value.")
+                for category, weight in x.weights.items():
+                    new_weight = input(f"  {category} (currently {weight}%): ")
+                    if new_weight == '':
+                        sum += weight
+                        d.update({category: weight})
+                    else:
+                        sum += float(new_weight)
+                        d.update({category: float(new_weight)})
+                if x.set_weights(d):
+                    print("Weights updated successfully.")
                 else:
-                    x.set_weights(d)
+                    print(f"Weights must sum to 100 (got {sum:.2f}). No changes made.")
+
 
 
         elif choice == "10":
