@@ -132,7 +132,7 @@ def main():
                 if x.find_item(item_title) is None:
                     print("Item not found")
                 else:
-                    x.find_item(item_title).update_score(input("Please input a score: "))
+                    x.find_item(item_title).update_score(float(input("Please input a score: ")))
                     print("Score updated successfully")
 
         elif choice == "7":

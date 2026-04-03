@@ -68,7 +68,7 @@ class CourseItem:
         if self.points_earned is None:
             score_text = "Not graded"
         else:
-            score_text = self.points_earned / self.points_possible
+            score_text = round((float(self.points_earned) / float(self.points_possible))*100, 2)
 
         if self.completed:
             status = "Completed"
